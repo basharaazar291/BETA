@@ -7,17 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <!-- Font Awesome for Social Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
   <!-- Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-
   <style>
     :root {
-      --primary: #00A896; 
+      --primary: #00A896;  
       --secondary: #002B5C;
       --bg: #002B5C;
       --card-bg: rgba(255, 255, 255, 0.05);
@@ -25,20 +22,17 @@
       --radius: 12px;
       --transition: all 0.3s ease;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background-color: var(--bg);
       overflow-x: hidden;
     }
-
     header {
       position: fixed;
       width: 100%;
@@ -51,15 +45,27 @@
       background: rgba(0, 43, 92, 0.7); /* Logo blue */
       color: white;
     }
-
     header h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 1.5rem;
       letter-spacing: 2px;
     }
 
+    .menu-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
     nav a {
-      margin-left: 1.5rem;
       text-decoration: none;
       color: white;
       font-weight: 500;
@@ -70,6 +76,35 @@
       color: var(--primary);
     }
 
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 43, 92, 0.95);
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      nav.open {
+        max-height: 300px;
+      }
+
+      nav a {
+        padding: 1rem;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
     canvas {
       position: fixed;
       top: 0;
@@ -78,7 +113,6 @@
       height: 100%;
       z-index: -2;
     }
-
     .hero {
       height: 100vh;
       display: flex;
@@ -90,20 +124,18 @@
       position: relative;
       overflow: hidden;
     }
-
     .parallax-bg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('https://cdn.pixabay.com/photo/2020/07/12/16/47/code-5296122_1280.jpg'); 
+      background-image: url('https://cdn.pixabay.com/photo/2020/07/12/16/47/code-5296122_1280.jpg');  
       background-size: cover;
       background-position: center;
       filter: brightness(0.3);
       z-index: -1;
     }
-
     .hero h1 {
       font-size: 4rem;
       font-family: 'Orbitron', sans-serif;
@@ -112,14 +144,12 @@
       position: relative;
       animation: glitch 2s infinite;
     }
-
     .hero p {
       font-size: 1.25rem;
       max-width: 600px;
       margin-bottom: 2rem;
       opacity: 0.8;
     }
-
     .cta-button {
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       color: black;
@@ -129,11 +159,9 @@
       text-decoration: none;
       transition: transform 0.3s ease;
     }
-
     .cta-button:hover {
       transform: scale(1.05);
     }
-
     @keyframes glitch {
       0% { clip-path: inset(0 0 98% 0); }
       10% { clip-path: inset(90% 0 0 0); }
@@ -147,30 +175,25 @@
       90% { clip-path: inset(20% 0 0 0); }
       100% { clip-path: inset(0 0 0 0); }
     }
-
     section {
       padding: 6rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
-
     section h2 {
       font-size: 2rem;
       margin-bottom: 2rem;
       text-align: center;
       color: var(--primary);
     }
-
     .team-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
     }
-
     .member-card {
       perspective: 1000px;
     }
-
     .flip-card {
       position: relative;
       width: 100%;
@@ -180,11 +203,9 @@
       transition: transform 0.6s;
       cursor: pointer;
     }
-
     .flip-card:hover {
       transform: rotateY(180deg);
     }
-
     .flip-card-front,
     .flip-card-back {
       position: absolute;
@@ -200,25 +221,20 @@
       background: var(--card-bg);
       color: white;
     }
-
     .flip-card-front h3 {
       color: var(--primary);
       margin-bottom: 0.5rem;
     }
-
     .flip-card-back ul {
       list-style: none;
       padding-left: 0;
     }
-
     .flip-card-back li {
       margin-bottom: 0.3rem;
     }
-
     .flip-card-back {
       transform: rotateY(180deg);
     }
-
     .contact-form {
       display: flex;
       flex-direction: column;
@@ -226,11 +242,9 @@
       max-width: 600px;
       margin: auto;
     }
-
     .form-group {
       position: relative;
     }
-
     .form-group input,
     .form-group textarea,
     .form-group select {
@@ -244,7 +258,6 @@
       outline: none;
       transition: border 0.3s ease;
     }
-
     .form-group label {
       position: absolute;
       top: 1rem;
@@ -253,7 +266,6 @@
       color: var(--primary);
       transition: all 0.3s;
     }
-
     .form-group input:focus ~ label,
     .form-group input:not(:placeholder-shown) ~ label,
     .form-group textarea:focus ~ label,
@@ -265,7 +277,6 @@
       background: var(--secondary);
       padding: 0 0.5rem;
     }
-
     .form-group select {
       -webkit-appearance: none;
       appearance: none;
@@ -280,11 +291,9 @@
       background-position: right 1rem center;
       background-size: 1rem;
     }
-
     .form-group select:focus {
       border-color: #00ffff;
     }
-
     .contact-form button {
       padding: 0.75rem;
       background: var(--primary);
@@ -295,12 +304,10 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-
     .contact-form button:hover {
       background: var(--secondary);
       color: white;
     }
-
     footer {
       background: var(--secondary);
       text-align: center;
@@ -309,35 +316,29 @@
       color: var(--primary);
       border-top: 1px solid rgba(0, 255, 255, 0.1);
     }
-
     .social-links a {
       margin: 0 10px;
       color: var(--primary);
       text-decoration: none;
       transition: color 0.3s;
     }
-
     .social-links a i {
       font-size: 1.4rem;
     }
-
     .social-links a:hover i {
       color: #00ffff !important;
       transform: scale(1.2);
     }
-
     .fade-up {
       opacity: 0;
       transform: translateY(40px);
     }
-
     .projects-section {
       background: rgba(0, 255, 255, 0.03);
       border-radius: var(--radius);
       padding: 4rem 2rem;
       text-align: center;
     }
-
     .project-carousel-container {
       display: flex;
       justify-content: center;
@@ -345,7 +346,6 @@
       height: 400px;
       perspective: 1000px;
     }
-
     .carousel-inner {
       position: relative;
       width: 300px;
@@ -353,7 +353,6 @@
       transform-style: preserve-3d;
       animation: rotateCarousel 20s linear infinite;
     }
-
     .carousel-item {
       position: absolute;
       width: 100%;
@@ -366,22 +365,18 @@
       font-size: 1.2rem;
       border: 1px solid var(--primary);
     }
-
     @keyframes rotateCarousel {
       from { transform: rotateY(0deg); }
       to { transform: rotateY(360deg); }
     }
-
     @media (max-width: 768px) {
       .hero h1 {
         font-size: 2.5rem;
       }
-
       .carousel-inner {
         width: 200px;
         height: 200px;
       }
-
       .carousel-item {
         font-size: 1rem;
       }
@@ -389,11 +384,11 @@
   </style>
 </head>
 <body class="dark">
-
   <!-- Header -->
   <header>
     <h1>BETA</h1>
-    <nav>
+    <button id="menuToggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
+    <nav id="mainNav">
       <a href="#about">About</a>
       <a href="#team">Team</a>
       <a href="#services">Services</a>
@@ -552,6 +547,12 @@
 
   <!-- Script -->
   <script>
+    // Mobile Menu Toggle
+    document.getElementById("menuToggle").addEventListener("click", function () {
+      const nav = document.getElementById("mainNav");
+      nav.classList.toggle("open");
+    });
+
     // Three.js Background Animation
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -562,33 +563,26 @@
     );
     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bgCanvas'), alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     const particleCount = 1000;
     const geometry = new THREE.BufferGeometry();
     const positions = [];
-
     for (let i = 0; i < particleCount * 3; i++) {
       positions.push((Math.random() - 0.5) * 100);
     }
-
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     const material = new THREE.PointsMaterial({
       color: 0x00A896,
       size: 0.5
     });
-
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
     camera.position.z = 5;
-
     function animate() {
       requestAnimationFrame(animate);
       particles.rotation.y += 0.002;
       renderer.render(scene, camera);
     }
-
     animate();
-
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -629,10 +623,8 @@
     const carouselItems = [
       "AI Chatbot", "Portfolio Website", "Mobile App UI", "Data Dashboard", "3D Portfolio"
     ];
-
     const carouselInner = document.getElementById("carouselInner");
     let angle = 0;
-
     carouselItems.forEach((item, i) => {
       const el = document.createElement("div");
       el.className = "carousel-item";
@@ -641,7 +633,6 @@
       el.style.transform = `rotateY(${phi}rad) translateZ(300px)`;
       carouselInner.appendChild(el);
     });
-
     setInterval(() => {
       angle -= 0.01;
       carouselInner.style.transform = `rotateY(${angle}rad)`;
