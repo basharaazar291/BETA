@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BETA | From Another Plane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Social Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #00A896; 
+      --secondary: #002B5C;
+      --bg: #002B5C;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text: #fff;
+      --radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background-color: var(--bg);
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      width: 100%;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 43, 92, 0.7); /* Logo blue */
+      color: white;
+    }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://cdn.pixabay.com/photo/2020/07/12/16/47/code-5296122_1280.jpg'); 
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.3);
+      z-index: -1;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      position: relative;
+      animation: glitch 2s infinite;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+    }
+
+    .cta-button {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: black;
+      padding: 0.75rem 2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes glitch {
+      0% { clip-path: inset(0 0 98% 0); }
+      10% { clip-path: inset(90% 0 0 0); }
+      20% { clip-path: inset(0 0 85% 0); }
+      30% { clip-path: inset(80% 0 0 0); }
+      40% { clip-path: inset(0 0 70% 0); }
+      50% { clip-path: inset(60% 0 0 0); }
+      60% { clip-path: inset(0 0 50% 0); }
+      70% { clip-path: inset(40% 0 0 0); }
+      80% { clip-path: inset(0 0 30% 0); }
+      90% { clip-path: inset(20% 0 0 0); }
+      100% { clip-path: inset(0 0 0 0); }
+    }
+
+    section {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .member-card {
+      perspective: 1000px;
+    }
+
+    .flip-card {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background: transparent;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .flip-card:hover {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
+      background: var(--card-bg);
+      color: white;
+    }
+
+    .flip-card-front h3 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .flip-card-back ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .flip-card-back li {
+      margin-bottom: 0.3rem;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius);
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      pointer-events: none;
+      color: var(--primary);
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label,
+    .form-group textarea:focus ~ label,
+    .form-group textarea:not(:placeholder-shown) ~ label,
+    .form-group select:focus ~ label,
+    .form-group select:not([value=""]) ~ label {
+      top: -0.5rem;
+      font-size: 0.8rem;
+      background: var(--secondary);
+      padding: 0 0.5rem;
+    }
+
+    .form-group select {
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: var(--secondary);
+      color: white;
+      font-size: 1rem;
+      border: 1px solid var(--primary);
+      padding: 1rem;
+      border-radius: var(--radius);
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%2300A896' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+    }
+
+    .form-group select:focus {
+      border-color: #00ffff;
+    }
+
+    .contact-form button {
+      padding: 0.75rem;
+      background: var(--primary);
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .contact-form button:hover {
+      background: var(--secondary);
+      color: white;
+    }
+
+    footer {
+      background: var(--secondary);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: var(--primary);
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social-links a i {
+      font-size: 1.4rem;
+    }
+
+    .social-links a:hover i {
+      color: #00ffff !important;
+      transform: scale(1.2);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .projects-section {
+      background: rgba(0, 255, 255, 0.03);
+      border-radius: var(--radius);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .project-carousel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 400px;
+      perspective: 1000px;
+    }
+
+    .carousel-inner {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      transform-style: preserve-3d;
+      animation: rotateCarousel 20s linear infinite;
+    }
+
+    .carousel-item {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      border: 1px solid var(--primary);
+    }
+
+    @keyframes rotateCarousel {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .carousel-inner {
+        width: 200px;
+        height: 200px;
+      }
+
+      .carousel-item {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="dark">
+
+  <!-- Header -->
+  <header>
+    <h1>BETA</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#team">Team</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <canvas id="bgCanvas"></canvas>
+    <div class="parallax-bg"></div>
+    <h1 class="glitch" data-text="BETA">BETA</h1>
+    <p class="fade-up">We build the future of digital experiences through custom apps, AI, websites, and mobile solutions.</p>
+    <a href="#about" class="cta-button fade-up">Explore Our Work</a>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="fade-up">
+    <h2>About BETA</h2>
+    <p style="max-width: 800px; margin: 2rem auto;">
+      BETA is a software innovation studio founded by four passionate engineers.
+      We specialize in building intelligent applications, beautiful interfaces,
+      and scalable systems — combining creativity with technical excellence.
+    </p>
+  </section>
+
+  <!-- Team -->
+  <section id="team">
+    <h2 class="fade-up">Meet the Founders</h2>
+    <div class="team-grid">
+      <div class="member-card fade-up">
+        <div class="flip-card">
+          <div class="flip-card-front">
+            <h3>Alex – AI Architect</h3>
+          </div>
+          <div class="flip-card-back">
+            <ul>
+              <li>Machine Learning</li>
+              <li>NLP</li>
+              <li>TensorFlow</li>
+              <li>Python</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="member-card fade-up">
+        <div class="flip-card">
+          <div class="flip-card-front">
+            <h3>Jane – Frontend</h3>
+          </div>
+          <div class="flip-card-back">
+            <ul>
+              <li>React.js</li>
+              <li>Three.js</li>
+              <li>GSAP</li>
+              <li>WebGL</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="member-card fade-up">
+        <div class="flip-card">
+          <div class="flip-card-front">
+            <h3>Mike – Mobile</h3>
+          </div>
+          <div class="flip-card-back">
+            <ul>
+              <li>Flutter</li>
+              <li>React Native</li>
+              <li>iOS / Android</li>
+              <li>UI/UX</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="member-card fade-up">
+        <div class="flip-card">
+          <div class="flip-card-front">
+            <h3>Sarah – Backend</h3>
+          </div>
+          <div class="flip-card-back">
+            <ul>
+              <li>Node.js</li>
+              <li>Docker</li>
+              <li>Cloud DevOps</li>
+              <li>Python / Django</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="projects-section fade-up">
+    <h2>Featured Projects</h2>
+    <div class="project-carousel-container">
+      <div class="carousel-inner" id="carouselInner"></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="fade-up">
+    <h2>Contact Us</h2>
+    <form class="contact-form" style="margin-top: 2rem;">
+      <div class="form-group">
+        <input type="text" required placeholder=" " />
+        <label>Your Name</label>
+      </div>
+      <div class="form-group">
+        <input type="email" required placeholder=" " />
+        <label>Your Email</label>
+      </div>
+      <div class="form-group">
+        <select required>
+          <option value="" disabled selected></option>
+          <option value="app">App Development</option>
+          <option value="website">Website</option>
+          <option value="ai">AI / Machine Learning</option>
+          <option value="fullstack">Full Stack</option>
+        </select>
+        <label>Project Type</label>
+      </div>
+      <div class="form-group">
+        <textarea rows="5" required placeholder=" "></textarea>
+        <label>Tell us about your idea...</label>
+      </div>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div style="margin-bottom: 1rem; font-size: 1.1rem;">
+      © 2025 BETA. All rights reserved.
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/yourusername"  target="_blank" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://facebook.com/yourpage"  target="_blank" title="Facebook">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com/yourpage"  target="_blank" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com/in/yourprofile"  target="_blank" title="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://wa.me/yournumber"  target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Three.js Background Animation
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bgCanvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const particleCount = 1000;
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+
+    for (let i = 0; i < particleCount * 3; i++) {
+      positions.push((Math.random() - 0.5) * 100);
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const material = new THREE.PointsMaterial({
+      color: 0x00A896,
+      size: 0.5
+    });
+
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      particles.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // GSAP Fade-ins
+    gsap.utils.toArray('.fade-up').forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
+    // Parallax Scrolling
+    gsap.to('.parallax-bg', {
+      yPercent: 30,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+
+    // 3D Carousel
+    const carouselItems = [
+      "AI Chatbot", "Portfolio Website", "Mobile App UI", "Data Dashboard", "3D Portfolio"
+    ];
+
+    const carouselInner = document.getElementById("carouselInner");
+    let angle = 0;
+
+    carouselItems.forEach((item, i) => {
+      const el = document.createElement("div");
+      el.className = "carousel-item";
+      el.innerText = item;
+      const phi = (i / carouselItems.length) * 2 * Math.PI;
+      el.style.transform = `rotateY(${phi}rad) translateZ(300px)`;
+      carouselInner.appendChild(el);
+    });
+
+    setInterval(() => {
+      angle -= 0.01;
+      carouselInner.style.transform = `rotateY(${angle}rad)`;
+    }, 50);
+  </script>
+</body>
+</html>
