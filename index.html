@@ -13,6 +13,42 @@
   <!-- Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   <style>
+  /* Custom Cursor */
+.custom-cursor,
+.custom-cursor2 {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  background-color: var(--primary);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+}
+
+.custom-cursor2 {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--primary);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Enlarge cursor on hover */
+a:hover ~ #cursor,
+button:hover ~ #cursor,
+nav a:hover ~ #cursor,
+.flip-card:hover ~ #cursor,
+.project-card:hover ~ #cursor {
+  background-color: white;
+  width: 30px;
+  height: 30px;
+}
     :root {
       --primary: #00A896;  
       --secondary: #002B5C;
@@ -114,16 +150,16 @@
       z-index: -2;
     }
     .hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
     .parallax-bg {
       position: absolute;
       top: 0;
@@ -176,7 +212,7 @@
       100% { clip-path: inset(0 0 0 0); }
     }
     section {
-      padding: 6rem 2rem;
+      padding: 8rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
@@ -381,6 +417,175 @@
         font-size: 1rem;
       }
     }
+    .project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.project-card {
+  perspective: 1000px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(0, 255, 255, 0.15);
+  background: var(--card-bg);
+}
+
+.project-card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(145deg, #002b5c, #001f3f);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.card-front h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.card-back ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card-back li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+.section-spacer {
+  margin-top: 8rem;
+  margin-bottom: 8rem;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.service-card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 255, 255, 0.1);
+  transition: transform 0.3s ease, background 0.3s;
+}
+
+.service-card:hover {
+  background: rgba(0, 255, 255, 0.1);
+  transform: translateY(-5px);
+}
+
+.service-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.service-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.testimonial-card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(0, 255, 255, 0.1);
+  font-style: italic;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 255, 255, 0.2);
+}
+
+.testimonial-card h4 {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+.newsletter {
+  max-width: 600px;
+  margin: 4rem auto;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 255, 255, 0.05);
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.newsletter h3 {
+  margin-bottom: 1rem;
+}
+
+.newsletter p {
+  opacity: 0.7;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-form input {
+  width: 70%;
+  padding: 0.75rem;
+  border-radius: var(--radius) 0 0 var(--radius);
+  border-right: none;
+  outline: none;
+}
+
+.newsletter-form button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--primary);
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.newsletter-form button:hover {
+  background: var(--secondary);
+  color: white;
+}
+
   </style>
 </head>
 <body class="dark">
@@ -415,6 +620,42 @@
       and scalable systems — combining creativity with technical excellence.
     </p>
   </section>
+  <!-- Services Section -->
+<section id="services" class="fade-up">
+  <h2>Our Services</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <i class="fas fa-microchip service-icon"></i>
+      <h3>AI & Machine Learning</h3>
+      <p>We develop intelligent systems powered by machine learning, NLP, and computer vision for smarter automation and insights.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-laptop-code service-icon"></i>
+      <h3>Web Development</h3>
+      <p>From sleek landing pages to complex web apps — we build fast, responsive, and interactive websites using React, Three.js, and more.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-mobile-alt service-icon"></i>
+      <h3>Mobile App Development</h3>
+      <p>Build cross-platform mobile apps with Flutter and React Native that work seamlessly on iOS and Android devices.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-server service-icon"></i>
+      <h3>Backend & Cloud</h3>
+      <p>Robust backend architecture, REST APIs, real-time services, and cloud solutions using Node.js, Docker, and AWS.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-paint-brush service-icon"></i>
+      <h3>UI/UX Design</h3>
+      <p>Designing beautiful, user-friendly interfaces tailored to your audience and brand identity.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-chart-line service-icon"></i>
+      <h3>Data Visualization</h3>
+      <p>Transform data into powerful visual dashboards and tools using D3.js, Chart.js, and live analytics platforms.</p>
+    </div>
+  </div>
+</section>
 
   <!-- Team -->
   <section id="team">
@@ -484,12 +725,100 @@
   </section>
 
   <!-- Projects -->
-  <section id="projects" class="projects-section fade-up">
+<section id="projects" class="projects-section fade-up section-spacer">
     <h2>Featured Projects</h2>
     <div class="project-carousel-container">
       <div class="carousel-inner" id="carouselInner"></div>
     </div>
   </section>
+  <!-- Enhanced 3D Project Showcase -->
+<section id="enhanced-projects" class="projects-section fade-up">
+  <h2>Our Advanced Projects</h2>
+  <div class="project-grid">
+    <!-- Example Project Cards -->
+    <div class="project-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>AI Chatbot</h3>
+          <p>Interactive AI assistant using NLP and GPT models.</p>
+        </div>
+        <div class="card-back">
+          <ul>
+            <li><strong>Tech:</strong> Python, TensorFlow</li>
+            <li><strong>Tools:</strong> Dialogflow, Flask</li>
+            <li><strong>Features:</strong> Voice input, real-time learning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Portfolio Website</h3>
+          <p>Highly interactive and animated portfolio landing page.</p>
+        </div>
+        <div class="card-back">
+          <ul>
+            <li><strong>Tech:</strong> React.js, Three.js</li>
+            <li><strong>Tools:</strong> GSAP, Framer Motion</li>
+            <li><strong>Features:</strong> Parallax effects, dark mode toggle</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Mobile App UI</h3>
+          <p>Modern cross-platform app built with Flutter and Material 3.</p>
+        </div>
+        <div class="card-back">
+          <ul>
+            <li><strong>Tech:</strong> Flutter, Dart</li>
+            <li><strong>Tools:</strong> Firebase, Figma</li>
+            <li><strong>Features:</strong> Real-time sync, gesture control</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-inner">
+        <div class="card-front">
+          <h3>Data Dashboard</h3>
+          <p>Real-time analytics dashboard with live data visualization.</p>
+        </div>
+        <div class="card-back">
+          <ul>
+            <li><strong>Tech:</strong> D3.js, Node.js</li>
+            <li><strong>Tools:</strong> Chart.js, Socket.IO</li>
+            <li><strong>Features:</strong> Live updates, export options</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Testimonials Section -->
+<section id="testimonials" class="fade-up">
+  <h2>What Clients Say</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p>"Working with BETA was an absolute pleasure. They delivered our AI-powered chatbot faster than expected and with top-notch quality!"</p>
+      <h4>— Sarah Johnson, CEO at TechFlow</h4>
+    </div>
+    <div class="testimonial-card">
+      <p>"Their team is incredibly skilled and passionate about what they do. The mobile app exceeded our expectations in both design and performance."</p>
+      <h4>— Mark Reynolds, Founder of Appify</h4>
+    </div>
+    <div class="testimonial-card">
+      <p>"BETA brought our vision to life with a stunning website and seamless backend integration. Highly recommend their full-stack services."</h4>
+      <h4>— Linda Moore, CTO at NovaLabs</h4>
+    </div>
+  </div>
+</section>
 
   <!-- Contact -->
   <section id="contact" class="fade-up">
@@ -520,7 +849,15 @@
       <button type="submit">Send Message</button>
     </form>
   </section>
-
+  <!-- Newsletter Signup -->
+  <div class="newsletter fade-up">
+    <h3>Stay Updated</h3>
+    <p>Subscribe to our newsletter for updates and project releases.</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Your email address" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
   <!-- Footer -->
   <footer>
     <div style="margin-bottom: 1rem; font-size: 1.1rem;">
@@ -544,9 +881,38 @@
       </a>
     </div>
   </footer>
+  <!-- Custom Cursor -->
+<div id="cursor" class="custom-cursor"></div>
+<div id="cursor2" class="custom-cursor2"></div>
 
   <!-- Script -->
   <script>
+    // Custom Cursor Effect
+const cursor = document.getElementById("cursor");
+const cursor2 = document.getElementById("cursor2");
+
+document.addEventListener("mousemove", (e) => {
+  gsap.to(cursor, { x: e.clientX, y: e.clientY });
+  gsap.to(cursor2, {
+    x: e.clientX,
+    y: e.clientY,
+    duration: 0.4,
+    ease: "power2.out"
+  });
+});
+
+// Enlarge cursor when hovering over links/buttons
+document.querySelectorAll("a, button, nav a, .flip-card, .project-card").forEach((el) => {
+  el.addEventListener("mouseenter", () => {
+    cursor.classList.add("hovered");
+    cursor2.style.opacity = "0";
+  });
+
+  el.addEventListener("mouseleave", () => {
+    cursor.classList.remove("hovered");
+    cursor2.style.opacity = "1";
+  });
+});
     // Mobile Menu Toggle
     document.getElementById("menuToggle").addEventListener("click", function () {
       const nav = document.getElementById("mainNav");
@@ -637,6 +1003,24 @@
       angle -= 0.01;
       carouselInner.style.transform = `rotateY(${angle}rad)`;
     }, 50);
+    gsap.utils.toArray('.project-card').forEach((el) => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 60 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 90%",
+        end: "bottom 60%",
+        toggleActions: "play none none reverse"
+      }
+    }
+  );
+});
+  
   </script>
+
 </body>
 </html>
